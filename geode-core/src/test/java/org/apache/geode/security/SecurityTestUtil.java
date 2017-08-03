@@ -18,16 +18,19 @@ package org.apache.geode.security;
 import static org.apache.geode.distributed.ConfigurationProperties.LOCATORS;
 import static org.apache.geode.distributed.ConfigurationProperties.MCAST_PORT;
 import static org.apache.geode.distributed.ConfigurationProperties.SECURITY_CLIENT_AUTH_INIT;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
+import java.util.List;
+import java.util.Properties;
+
+import org.assertj.core.api.ThrowableAssert;
 
 import org.apache.geode.cache.Region;
 import org.apache.geode.cache.client.ClientCache;
 import org.apache.geode.cache.client.ClientCacheFactory;
 import org.apache.geode.cache.client.ClientRegionShortcut;
 import org.apache.geode.security.templates.UserPasswordAuthInit;
-import org.assertj.core.api.ThrowableAssert;
-
-import java.util.Properties;
 
 public class SecurityTestUtil {
 
@@ -48,7 +51,11 @@ public class SecurityTestUtil {
   }
 
   public static void assertNotAuthorized(ThrowableAssert.ThrowingCallable shouldRaiseThrowable,
-      String permString) {
+                                         String permString) {
     assertThatThrownBy(shouldRaiseThrowable).hasMessageContaining(permString);
+  }
+
+  public static void assertAuthorized(List exceptionsThrownResults) {
+    assertThat(exceptionsThrownResults).isEmpty();
   }
 }
